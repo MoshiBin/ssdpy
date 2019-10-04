@@ -1,0 +1,2 @@
+SSDPy: Python SSDP library
+==========================
