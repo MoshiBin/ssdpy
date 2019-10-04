@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from six import BytesIO
 from six.moves import http_client
+from .compat import PY2
 
 
 class FakeSocket:
@@ -26,4 +27,7 @@ def parse_headers(response):
     wrapped_response = FakeSocket(response)
     http_response = http_client.HTTPResponse(wrapped_response)
     http_response.begin()
+    if PY2:
+        # In python2.7 HTTPResponse.headers doesn't exist
+        return dict(http_response.getheaders())
     return dict(http_response.headers)
