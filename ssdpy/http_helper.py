@@ -29,5 +29,11 @@ def parse_headers(response):
     http_response.begin()
     if PY2:
         # In python2.7 HTTPResponse.headers doesn't exist
-        return dict(http_response.getheaders())
-    return dict(http_response.headers)
+        headers = dict(http_response.getheaders())
+    else:
+        headers = {}
+        # Python 2.7 converts headers to lowercase. Do the same for compatibility.
+        # TODO: Consider implementing HTTP header reading ourselves to avoid this issue.
+        for header, value in dict(http_response.headers).items():
+            headers[header.lower()] = value
+    return headers

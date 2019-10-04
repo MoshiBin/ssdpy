@@ -13,8 +13,8 @@ class TestHTTPHelper(unittest.TestCase):
             b"MX: 5\r\n"
         )
         headers = parse_headers(good_response)
-        self.assertEqual("5", headers.get("MX"))
-        self.assertEqual(None, headers.get("SHOULD-NOT-EXIST"))
+        self.assertEqual("5", headers.get("mx"))
+        self.assertEqual(None, headers.get("should-not-exist"))
 
         bad_response = b"not an http response"
         with self.assertRaises(Exception):
