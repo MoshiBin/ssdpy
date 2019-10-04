@@ -4,8 +4,6 @@ from ssdpy.http_helper import FakeSocket, parse_headers
 
 class TestHTTPHelper(unittest.TestCase):
     def test_fake_socket(self):
-        with self.assertRaises(TypeError):
-            FakeSocket("xxx")
         fs = FakeSocket(b"xxx")
         self.assertIsInstance(fs, FakeSocket)
 
