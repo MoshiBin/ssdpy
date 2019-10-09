@@ -20,7 +20,7 @@ class TestHTTPHelper(unittest.TestCase):
         another_bad_response = (
             b"HTTP/1.1 200 OK\r\n"
             b"Header: OK\r\n"
-            b"Another-header:not-ok\r\n"
+            b"Another-header-not-ok\r\n"
         )
         with self.assertRaises(ValueError):
             parse_headers(another_bad_response)
