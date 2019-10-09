@@ -1,11 +1,8 @@
 import unittest
-from ssdpy.http_helper import FakeSocket, parse_headers
+from ssdpy.http_helper import parse_headers
 
 
 class TestHTTPHelper(unittest.TestCase):
-    def test_fake_socket(self):
-        fs = FakeSocket(b"xxx")
-        self.assertIsInstance(fs, FakeSocket)
 
     def test_parse_headers(self):
         good_response = (
@@ -17,5 +14,13 @@ class TestHTTPHelper(unittest.TestCase):
         self.assertEqual(None, headers.get("should-not-exist"))
 
         bad_response = b"not an http response"
-        with self.assertRaises(Exception):
+        with self.assertRaises(ValueError):
             parse_headers(bad_response)
+
+        another_bad_response = (
+            b"HTTP/1.1 200 OK\r\n"
+            b"Header: OK\r\n"
+            b"Another-header:not-ok\r\n"
+        )
+        with self.assertRaises(ValueError):
+            parse_headers(another_bad_response)

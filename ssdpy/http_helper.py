@@ -1,39 +1,24 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from six import BytesIO
-from six.moves import http_client
-from .compat import PY2
 
-
-class FakeSocket:
+def parse_headers(response, convert_to_lowercase=True):
     """
-    Implements a fake socket from a given response string.
-    Used to instantiate http_client.HTTPResponse, which expects a socket-like object.
-    """
-
-    def __init__(self, response):
-        self._file = BytesIO(response)
-
-    def makefile(self, *args, **kwargs):
-        return self._file
-
-
-def parse_headers(response):
-    """
-    Receives an HTTP response string and parses the HTTP headers.
+    Receives an HTTP response bytes object and parses the HTTP headers.
     Return a dict of all headers.
+    If convert_to_lowercase is true, all headers will be saved in lowercase form.
     """
-    wrapped_response = FakeSocket(response)
-    http_response = http_client.HTTPResponse(wrapped_response)
-    http_response.begin()
-    if PY2:
-        # In python2.7 HTTPResponse.headers doesn't exist
-        headers = dict(http_response.getheaders())
-    else:
-        headers = {}
-        # Python 2.7 converts headers to lowercase. Do the same for compatibility.
-        # TODO: Consider implementing HTTP header reading ourselves to avoid this issue.
-        for header, value in dict(http_response.headers).items():
-            headers[header.lower()] = value
+    if not response.startswith(b"HTTP/1.1"):
+        raise ValueError("Invalid response: Should start with HTTP/1.1")
+
+    lines = response.split(b"\r\n")
+    headers = {}
+    # Skip the first line since it's just the HTTP return code
+    for line in lines[1:]:
+        if not line:
+            break  # Headers and content are separated by a blank line
+        if b":" not in line:
+            raise ValueError("Invalid header: {}".format(line))
+        header_name, header_value = line.split(b":", 1)
+        headers[header_name.decode("utf-8").lower().strip()] = header_value.decode("utf-8").strip()
     return headers
