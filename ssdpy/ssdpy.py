@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import socket
 from .constants import IPv4, IPv6
 from .http_helper import parse_headers
+from .protocol import create_msearch_payload
 
 
 class MulticastSocket(object):
@@ -43,18 +44,28 @@ class MulticastSocket(object):
             pass
         return
 
-    def m_search(self):
-        data = (
-            (
-                "M-SEARCH * HTTP/1.1\r\n"
-                "HOST: {}:{}\r\n"
-                "MAN: ssdp:discover\r\n"
-                "MX: 1\r\n"
-                "ST: ssdp:all\r\n"
-            )
-            .format(self.broadcast_ip, self.port)
-            .encode("utf-8")
-        )
+    def m_search(self, st="ssdp:all", mx=1):
+        """
+        Send an M-SEARCH request and gather responses.
+
+        Parameters
+        ----------
+        st : str
+            The Search Target, used to narrow down the responses
+            that should be received. Defaults to "ssdp:all" which should get
+            responses from any SSDP-enabled device.
+
+        mx : int
+            Maximum wait time (in seconds) that devices are allowed to wait before
+            sending a response. Should be between 1 and 5, though this is not enforced
+            in this implementation.
+            Devices will randomly wait for anywhere between 0 and 'mx' seconds in
+            order to avoid flooding the client that sends the M-SEARCH. Increase the
+            value of 'mx' if you expect a large number of devices to answer, in order
+            to avoid losing responses.
+        """
+        host = "{}:{}".format(self.broadcast_ip, self.port)
+        data = create_msearch_payload(host, st, mx)
         self.send(data)
         return [x for x in self.recv()]
 
