@@ -9,7 +9,7 @@ from .protocol import create_notify_payload
 from .http_helper import parse_headers
 
 
-logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger("ssdpy.server")
 
 
 class SSDPServer:
@@ -75,18 +75,18 @@ class SSDPServer:
         self.sock.bind((bind_address, port))
 
     def on_recv(self, data, address):
-        logging.debug("Received packet from {}: {}".format(address, data))
+        logger.debug("Received packet from {}: {}".format(address, data))
         try:
             headers = parse_headers(data)
         except ValueError:
             # Not an SSDP M-SEARCH; ignore.
-            logging.debug("NOT M-SEARCH - SKIPPING")
+            logger.debug("NOT M-SEARCH - SKIPPING")
             pass
         if data.startswith(b"M-SEARCH") and (
             headers.get("st") == self.device_type or headers.get("st") == "ssdp:all"
         ):
-            logging.info("Received qualifying M-SEARCH from {}".format(address))
-            logging.debug("M-SEARCH data: {}".format(headers))
+            logger.info("Received qualifying M-SEARCH from {}".format(address))
+            logger.debug("M-SEARCH data: {}".format(headers))
             notify = create_notify_payload(
                 self._broadcast_ip,
                 self.device_type,
@@ -95,16 +95,11 @@ class SSDPServer:
                 self.al,
                 self.max_age,
             )
-            logging.debug("Created NOTIFY: {}".format(notify))
+            logger.debug("Created NOTIFY: {}".format(notify))
             self.sock.sendto(notify, address)
 
     def serve_forever(self):
-        logging.debug("Listening forever")
+        logger.info("Listening forever")
         while True:
             data, address = self.sock.recvfrom(1024)
             self.on_recv(data, address)
-
-
-def test_server():
-    mcs = SSDPServer("de11")
-    mcs.serve_forever()
