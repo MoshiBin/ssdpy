@@ -12,3 +12,7 @@ class IPv4(IPProto):
 
 class IPv6(IPProto):
     pass
+
+
+ipv4_multicast_ip = "239.255.255.250"
+ipv6_multicast_ip = "ff02::c"

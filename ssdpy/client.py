@@ -2,7 +2,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import socket
-from .constants import IPv4, IPv6
+from .constants import IPv4, IPv6, ipv4_multicast_ip, ipv6_multicast_ip
 from .http_helper import parse_headers
 from .protocol import create_msearch_payload
 
@@ -19,15 +19,16 @@ class SSDPClient(object):
         self.port = port
         if proto is IPv4:
             af_type = socket.AF_INET
-            self.broadcast_ip = "239.255.255.250"
+            self.broadcast_ip = ipv4_multicast_ip
             self._address = (self.broadcast_ip, port)
         elif proto is IPv6:
             af_type = socket.AF_INET6
-            self.broadcast_ip = "ff02::c"  # TODO: Support other ipv6 multicasts
+            self.broadcast_ip = ipv6_multicast_ip  # TODO: Support other ipv6 multicasts
             self._address = (self.broadcast_ip, port, 0, 0)
         self.sock = socket.socket(af_type, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, ttl)
+        self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 1)
         self.sock.settimeout(timeout)
         if iface is not None:
             self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, iface)
