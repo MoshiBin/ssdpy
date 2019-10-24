@@ -12,7 +12,7 @@ from .http_helper import parse_headers
 logger = logging.getLogger("ssdpy.server")
 
 
-class SSDPServer:
+class SSDPServer(object):
     def __init__(
         self,
         usn,
