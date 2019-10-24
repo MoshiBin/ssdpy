@@ -7,7 +7,7 @@ from .http_helper import parse_headers
 from .protocol import create_msearch_payload
 
 
-class MulticastSocket(object):
+class SSDPClient(object):
     def __init__(
         self, proto=IPv4, port=1900, ttl=2, iface=None, timeout=5, *args, **kwargs
     ):
@@ -71,7 +71,7 @@ class MulticastSocket(object):
 
 
 def discover():
-    ms = MulticastSocket()
+    ms = SSDPClient()
     responses = ms.m_search()
     ret = []
     for response in responses:
