@@ -3,7 +3,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import logging
 import socket
-import struct
 from .constants import IPv4, IPv6, ipv6_multicast_ip, ipv4_multicast_ip
 from .protocol import create_notify_payload
 from .http_helper import parse_headers
@@ -37,6 +36,7 @@ class SSDPServer(object):
             raise ValueError(
                 "Invalid proto - expected one of {}".format(allowed_protos)
             )
+        self.stopped = False
         self.usn = usn
         self.device_type = device_type
         self.al = al
@@ -100,6 +100,10 @@ class SSDPServer(object):
 
     def serve_forever(self):
         logger.info("Listening forever")
-        while True:
-            data, address = self.sock.recvfrom(1024)
-            self.on_recv(data, address)
+        try:
+            while not self.stopped:
+                data, address = self.sock.recvfrom(1024)
+                self.on_recv(data, address)
+        except Exception:
+            self.sock.close()
+            raise
