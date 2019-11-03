@@ -18,7 +18,7 @@ def create_msearch_payload(host, st, mx=1):
     data = (
         "M-SEARCH * HTTP/1.1\r\n"
         "HOST:{}\r\n"
-        "MAN:ssdp:discover\r\n"
+        'MAN: "ssdp:discover"\r\n'
         "ST:{}\r\n"
         "MX:{}\r\n"
     ).format(host, st, mx)
