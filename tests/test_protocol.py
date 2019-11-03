@@ -11,7 +11,7 @@ class TestProtocol(unittest.TestCase):
         data_headers = parse_headers(data)
         self.assertEqual(data_headers.get("host"), "239.255.255.250:1900")
         self.assertEqual(data_headers.get("st"), "ssdp:all")
-        self.assertEqual(data_headers.get("man"), "ssdp:discover")
+        self.assertEqual(data_headers.get("man"), '"ssdp:discover"')
         self.assertEqual(data_headers.get("mx"), "1")
 
     def test_notify_payload(self):
