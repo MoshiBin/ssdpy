@@ -7,4 +7,4 @@ from .client import SSDPClient
 
 __version__ = VERSION
 
-__all__ = [SSDPServer, SSDPClient]
+__all__ = ["SSDPServer", "SSDPClient"]
