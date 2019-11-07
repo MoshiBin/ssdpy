@@ -68,7 +68,17 @@ class SSDPClient(object):
         host = "{}:{}".format(self.broadcast_ip, self.port)
         data = create_msearch_payload(host, st, mx)
         self.send(data)
-        return [x for x in self.recv()]
+        responses = [x for x in self.recv()]
+        parsed_responses = []
+        for response in responses:
+            try:
+                headers = parse_headers(response)
+                parsed_responses.append(headers)
+            except ValueError:
+                # Invalid response, do nothing.
+                # TODO: Log dropped responses
+                pass
+        return parsed_responses
 
 
 def discover():
