@@ -11,7 +11,7 @@ logging.basicConfig()
 
 
 def parse_args(argv):
-    parser = argparse.ArgumentParser(description="Start an SSDP server",)
+    parser = argparse.ArgumentParser(description="Start an SSDP server")
     parser.add_argument(
         "-V", "--version", action="version", version="%(prog)s {}".format(VERSION)
     )
@@ -61,6 +61,7 @@ def main(argv=None):
         args.usn[0],
         proto=proto,
         device_type=args.device_type,
+        port=args.port,
         iface=args.iface,
         max_age=args.max_age,
         al=args.location,
