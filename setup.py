@@ -18,6 +18,11 @@ setup(
     url="https://github.com/MoshiBin/ssdpy",
     packages=find_packages(exclude=["tests"]),
     python_requires=">=2.7",
+    entry_points={
+        "console_scripts": [
+            "ssdpy-server = ssdpy.cli.server:main",
+        ]
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 2",
