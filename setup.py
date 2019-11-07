@@ -21,6 +21,7 @@ setup(
     entry_points={
         "console_scripts": [
             "ssdpy-server = ssdpy.cli.server:main",
+            "ssdpy-discover = ssdpy.cli.client:main",
         ]
     },
     classifiers=[
