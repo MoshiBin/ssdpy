@@ -5,6 +5,7 @@ import socket
 from .constants import IPv4, IPv6, ipv4_multicast_ip, ipv6_multicast_ip
 from .http_helper import parse_headers
 from .protocol import create_msearch_payload
+from .compat import if_nametoindex
 
 
 class SSDPClient(object):
@@ -32,6 +33,12 @@ class SSDPClient(object):
         self.sock.settimeout(timeout)
         if iface is not None:
             self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, iface)
+            if proto is IPv6:
+                # Specifically set multicast on interface
+                iface_index = if_nametoindex(iface)
+                self.sock.setsockopt(
+                    socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_IF, iface_index
+                )
 
     def send(self, data):
         self.sock.sendto(data, self._address)

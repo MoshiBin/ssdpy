@@ -43,6 +43,11 @@ def parse_args(argv):
         "--location",
         help="Location that notifications should point to. This sets both LOCATION and AL",
     )
+    parser.add_argument(
+        "-a",
+        "--address",
+        help="Address of the interface to listen on. Only valid for IPv4.",
+    )
     return parser.parse_args(argv)
 
 
@@ -63,6 +68,7 @@ def main(argv=None):
         device_type=args.device_type,
         port=args.port,
         iface=args.iface,
+        address=args.address,
         max_age=args.max_age,
         al=args.location,
         location=args.location,
