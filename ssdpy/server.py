@@ -3,9 +3,11 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import logging
 import socket
+import struct
 from .constants import IPv4, IPv6, ipv6_multicast_ip, ipv4_multicast_ip
 from .protocol import create_notify_payload
 from .http_helper import parse_headers
+from .compat import if_nametoindex
 
 
 logger = logging.getLogger("ssdpy.server")
@@ -19,6 +21,7 @@ class SSDPServer(object):
         device_type="ssdp:rootdevice",
         port=1900,
         iface=None,
+        address=None,
         max_age=None,
         location=None,
         al=None,
@@ -43,6 +46,7 @@ class SSDPServer(object):
         self.location = location
         self.max_age = max_age
         self._iface = iface
+
         if proto is IPv4:
             self._af_type = socket.AF_INET
             self._broadcast_ip = ipv4_multicast_ip
@@ -53,23 +57,38 @@ class SSDPServer(object):
             self._broadcast_ip = ipv6_multicast_ip
             self._address = (self._broadcast_ip, port, 0, 0)
             bind_address = "::"
+
         self.sock = socket.socket(self._af_type, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+        # Bind to specific interface
         if iface is not None:
             self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, iface)
+
+        # Subscribe to multicast address
         if proto is IPv4:
+            mreq = socket.inet_aton(self._broadcast_ip)
+            if address is not None:
+                mreq += socket.inet_aton(address)
+            else:
+                mreq += struct.pack(b"@I", socket.INADDR_ANY)
             self.sock.setsockopt(
-                socket.IPPROTO_IP,
-                socket.IP_ADD_MEMBERSHIP,
-                socket.inet_aton(self._broadcast_ip) + socket.inet_aton("0.0.0.0"),
+                socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq,
             )
+            # Allow multicasts on loopback devices (necessary for testing)
             self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 1)
         elif proto is IPv6:
+            # In IPv6 we use the interface index, not the address when subscribing to the group
+            mreq = socket.inet_pton(socket.AF_INET6, self._broadcast_ip)
+            if iface is not None:
+                iface_index = if_nametoindex(iface)
+                # Send outgoing packets from the same interface
+                self.sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_IF, iface_index)
+                mreq += struct.pack(b"@I", iface_index)
+            else:
+                mreq += socket.inet_pton(socket.AF_INET6, "::")
             self.sock.setsockopt(
-                socket.IPPROTO_IPV6,
-                socket.IPV6_JOIN_GROUP,
-                socket.inet_pton(socket.AF_INET6, self._broadcast_ip)
-                + socket.inet_pton(socket.AF_INET6, "::"),
+                socket.IPPROTO_IPV6, socket.IPV6_JOIN_GROUP, mreq,
             )
             self.sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_LOOP, 1)
         self.sock.bind((bind_address, port))
