@@ -40,6 +40,7 @@ def parse_args(argv):
     parser.add_argument(
         "--max-age",
         help="The amount of seconds that the server info should be cached for (default: do not cache)",
+        type=int,
     )
     parser.add_argument(
         "-l",
