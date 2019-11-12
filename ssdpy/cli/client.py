@@ -25,21 +25,26 @@ def parse_args(argv):
         "-6", "--ipv6", help="Listen on IPv6 instead of IPv4", action="store_true"
     )
     parser.add_argument(
-        "-t", "--ttl", help="TTL for the M-SEARCH (default: 2)", default=2
+        "-t", "--ttl", help="TTL for the M-SEARCH (default: 2)", default=2, type=int
     )
     parser.add_argument(
         "-o",
         "--timeout",
         help="Maximum timeout for connections (default: 5)",
         default=5,
+        type=int,
     )
     parser.add_argument("ST", help="Type of device to search for (ST)", nargs=1)
     parser.add_argument("-i", "--iface", help="Listen on a specific network interface")
     parser.add_argument(
-        "-p", "--port", help="Send on this port (default: 1900)", default=1900
+        "-p", "--port", help="Send on this port (default: 1900)", default=1900, type=int
     )
     parser.add_argument(
-        "-m", "--mx", help="Maximum wait time for response (default 1s)", default=1
+        "-m",
+        "--mx",
+        help="Maximum wait time for response (default 1s)",
+        default=1,
+        type=int,
     )
     return parser.parse_args(argv)
 

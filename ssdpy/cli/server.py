@@ -32,7 +32,11 @@ def parse_args(argv):
     )
     parser.add_argument("-i", "--iface", help="Listen on a specific network interface")
     parser.add_argument(
-        "-p", "--port", help="Listen on this port (default: 1900)", default=1900
+        "-p",
+        "--port",
+        help="Listen on this port (default: 1900)",
+        default=1900,
+        type=int,
     )
     parser.add_argument(
         "--max-age",
