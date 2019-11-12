@@ -5,7 +5,6 @@ import argparse
 import logging
 from ..version import VERSION
 from ..server import SSDPServer
-from ..constants import IPv4, IPv6
 
 logging.basicConfig()
 
@@ -59,9 +58,9 @@ def main(argv=None):
     args = parse_args(argv)
 
     if args.ipv6:
-        proto = IPv6
+        proto = "ipv6"
     else:
-        proto = IPv4
+        proto = "ipv4"
 
     if args.iface is not None:
         args.iface = args.iface.encode("utf-8")

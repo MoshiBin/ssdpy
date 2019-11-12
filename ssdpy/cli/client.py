@@ -6,7 +6,6 @@ import logging
 import pprint
 from ..version import VERSION
 from ..client import SSDPClient
-from ..constants import IPv4, IPv6
 
 logging.basicConfig()
 
@@ -17,11 +16,7 @@ def parse_args(argv):
         "-V", "--version", action="version", version="%(prog)s {}".format(VERSION)
     )
     parser.add_argument("-v", "--verbose", help="Be more verbose", action="store_true")
-    proto_group = parser.add_mutually_exclusive_group()
-    proto_group.add_argument(
-        "-4", "--ipv4", help="Listen on IPv4 (default: True)", action="store_true"
-    )
-    proto_group.add_argument(
+    parser.add_argument(
         "-6", "--ipv6", help="Listen on IPv6 instead of IPv4", action="store_true"
     )
     parser.add_argument(
@@ -53,9 +48,9 @@ def main(argv=None):
     args = parse_args(argv)
 
     if args.ipv6:
-        proto = IPv6
+        proto = "ipv6"
     else:
-        proto = IPv4
+        proto = "ipv4"
 
     if args.iface is not None:
         args.iface = args.iface.encode("utf-8")

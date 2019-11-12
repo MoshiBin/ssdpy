@@ -2,7 +2,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import socket
-from .constants import IPv4, IPv6, ipv4_multicast_ip, ipv6_multicast_ip
+from .constants import ipv4_multicast_ip, ipv6_multicast_ip
 from .http_helper import parse_headers
 from .protocol import create_msearch_payload
 from .compat import if_nametoindex
@@ -10,19 +10,19 @@ from .compat import if_nametoindex
 
 class SSDPClient(object):
     def __init__(
-        self, proto=IPv4, port=1900, ttl=2, iface=None, timeout=5, *args, **kwargs
+        self, proto="ipv4", port=1900, ttl=2, iface=None, timeout=5, *args, **kwargs
     ):
-        allowed_protos = (IPv4, IPv6)
+        allowed_protos = ("ipv4", "ipv6")
         if proto not in allowed_protos:
             raise ValueError(
                 "Invalid proto - expected one of {}".format(allowed_protos)
             )
         self.port = port
-        if proto is IPv4:
+        if proto == "ipv4":
             af_type = socket.AF_INET
             self.broadcast_ip = ipv4_multicast_ip
             self._address = (self.broadcast_ip, port)
-        elif proto is IPv6:
+        elif proto == "ipv6":
             af_type = socket.AF_INET6
             self.broadcast_ip = ipv6_multicast_ip  # TODO: Support other ipv6 multicasts
             self._address = (self.broadcast_ip, port, 0, 0)
@@ -33,7 +33,7 @@ class SSDPClient(object):
         self.sock.settimeout(timeout)
         if iface is not None:
             self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, iface)
-            if proto is IPv6:
+            if proto == "ipv6":
                 # Specifically set multicast on interface
                 iface_index = if_nametoindex(iface)
                 self.sock.setsockopt(
