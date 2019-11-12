@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
-from unittest.mock import MagicMock
+from ssdpy.compat import mock
 from ssdpy.cli import server as server_cli
 
 
@@ -22,7 +22,7 @@ class TestServerCLI(unittest.TestCase):
         self.assertTrue(args.verbose)
 
     def test_ssdpserver_init(self):
-        server_cli.SSDPServer = MagicMock()
+        server_cli.SSDPServer = mock.MagicMock()
         server_cli.main(("TestServer",))
         server_cli.SSDPServer.assert_called_once_with(
             "TestServer",
@@ -37,7 +37,7 @@ class TestServerCLI(unittest.TestCase):
         )
 
     def test_ssdpserver_init_with_ipv6(self):
-        server_cli.SSDPServer = MagicMock()
+        server_cli.SSDPServer = mock.MagicMock()
         server_cli.main(("TestServer", "-6"))
         server_cli.SSDPServer.assert_called_once_with(
             "TestServer",
@@ -51,7 +51,7 @@ class TestServerCLI(unittest.TestCase):
             proto="ipv6",
         )
 
-        server_cli.SSDPServer = MagicMock()
+        server_cli.SSDPServer = mock.MagicMock()
         server_cli.main(("TestServer", "--ipv6"))
         server_cli.SSDPServer.assert_called_once_with(
             "TestServer",
@@ -66,7 +66,7 @@ class TestServerCLI(unittest.TestCase):
         )
 
     def test_ssdpserver_init_with_args(self):
-        server_cli.SSDPServer = MagicMock()
+        server_cli.SSDPServer = mock.MagicMock()
         server_cli.main(
             (
                 "TestServer",
