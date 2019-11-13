@@ -29,3 +29,9 @@ if PY2:
         return rc
 else:
     if_nametoindex = socket.if_nametoindex
+
+
+if PY2:
+    import mock
+else:
+    from unittest import mock  # noqa

@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import logging
 import socket
 import struct
-from .constants import IPv4, IPv6, ipv6_multicast_ip, ipv4_multicast_ip
+from .constants import ipv6_multicast_ip, ipv4_multicast_ip
 from .protocol import create_notify_payload
 from .http_helper import parse_headers
 from .compat import if_nametoindex
@@ -17,7 +17,7 @@ class SSDPServer(object):
     def __init__(
         self,
         usn,
-        proto=IPv4,
+        proto="ipv4",
         device_type="ssdp:rootdevice",
         port=1900,
         iface=None,
@@ -34,7 +34,7 @@ class SSDPServer(object):
         >>> server = SSDPServer("my-service", device_type="my-device-type")
         >>> server.serve_forever()
         """
-        allowed_protos = (IPv4, IPv6)
+        allowed_protos = ("ipv4", "ipv6")
         if proto not in allowed_protos:
             raise ValueError(
                 "Invalid proto - expected one of {}".format(allowed_protos)
@@ -47,12 +47,12 @@ class SSDPServer(object):
         self.max_age = max_age
         self._iface = iface
 
-        if proto is IPv4:
+        if proto == "ipv4":
             self._af_type = socket.AF_INET
             self._broadcast_ip = ipv4_multicast_ip
             self._address = (self._broadcast_ip, port)
             bind_address = "0.0.0.0"
-        elif proto is IPv6:
+        elif proto == "ipv6":
             self._af_type = socket.AF_INET6
             self._broadcast_ip = ipv6_multicast_ip
             self._address = (self._broadcast_ip, port, 0, 0)
@@ -66,7 +66,7 @@ class SSDPServer(object):
             self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, iface)
 
         # Subscribe to multicast address
-        if proto is IPv4:
+        if proto == "ipv4":
             mreq = socket.inet_aton(self._broadcast_ip)
             if address is not None:
                 mreq += socket.inet_aton(address)
@@ -77,7 +77,7 @@ class SSDPServer(object):
             )
             # Allow multicasts on loopback devices (necessary for testing)
             self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 1)
-        elif proto is IPv6:
+        elif proto == "ipv6":
             # In IPv6 we use the interface index, not the address when subscribing to the group
             mreq = socket.inet_pton(socket.AF_INET6, self._broadcast_ip)
             if iface is not None:

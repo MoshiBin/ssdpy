@@ -5,7 +5,6 @@ import argparse
 import logging
 from ..version import VERSION
 from ..server import SSDPServer
-from ..constants import IPv4, IPv6
 
 logging.basicConfig()
 
@@ -32,11 +31,16 @@ def parse_args(argv):
     )
     parser.add_argument("-i", "--iface", help="Listen on a specific network interface")
     parser.add_argument(
-        "-p", "--port", help="Listen on this port (default: 1900)", default=1900
+        "-p",
+        "--port",
+        help="Listen on this port (default: 1900)",
+        default=1900,
+        type=int,
     )
     parser.add_argument(
         "--max-age",
         help="The amount of seconds that the server info should be cached for (default: do not cache)",
+        type=int,
     )
     parser.add_argument(
         "-l",
@@ -55,9 +59,9 @@ def main(argv=None):
     args = parse_args(argv)
 
     if args.ipv6:
-        proto = IPv6
+        proto = "ipv6"
     else:
-        proto = IPv4
+        proto = "ipv4"
 
     if args.iface is not None:
         args.iface = args.iface.encode("utf-8")
