@@ -18,6 +18,9 @@ setup(
     url="https://github.com/MoshiBin/ssdpy",
     packages=find_packages(exclude=["tests"]),
     python_requires=">=2.7",
+    install_requires=[
+        'mock;python_version<"3.4"',
+    ],
     entry_points={
         "console_scripts": [
             "ssdpy-server = ssdpy.cli.server:main",
