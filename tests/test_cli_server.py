@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
-from ssdpy.compat import mock
+from .compat import mock
 from ssdpy.cli import server as server_cli
 
 
