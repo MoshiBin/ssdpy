@@ -115,7 +115,11 @@ class SSDPServer(object):
                 self.max_age,
             )
             logger.debug("Created NOTIFY: {}".format(notify))
-            self.sock.sendto(notify, address)
+            try:
+                self.sock.sendto(notify, address)
+            except OSError as e:
+                # Most commonly: We received a multicast from an IP not in our subnet
+                logger.debug("Unable to send NOTIFY to {}: {}".format(address, e))
 
     def serve_forever(self):
         logger.info("Listening forever")
