@@ -2,6 +2,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import argparse
+import json
 import logging
 import pprint
 from ..version import VERSION
@@ -41,6 +42,12 @@ def parse_args(argv):
         default=1,
         type=int,
     )
+    parser.add_argument(
+        "-j",
+        "--json",
+        help="Format output as JSON",
+        action="store_true",
+    )
     return parser.parse_args(argv)
 
 
@@ -69,5 +76,8 @@ def main(argv=None):
         logger.setLevel(logging.DEBUG)
 
     response = client.m_search(st=args.ST[0], mx=args.mx)
-    for device in response:
-        pprint.pprint(device)
+    if args.json:
+        print(json.dumps(response))
+    else:
+        for device in response:
+            pprint.pprint(device)
