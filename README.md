@@ -54,6 +54,7 @@ SSDPy comes with two CLI utilities:
 
 - Update `ssdpy/version.py` with new version name.
 - Update `CHANGES.md`.
+- Commit the changes, tag with version & push.
 - Run `make release`.
 
 ## Links
