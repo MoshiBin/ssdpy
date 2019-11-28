@@ -43,6 +43,19 @@ Then, from a client, M-SEARCH for our server:
 my-service-identifier
 ```
 
+## CLI utilities
+
+SSDPy comes with two CLI utilities:
+
+- ssdpy-server is a server that listens for M-SEARCHes and responds if they match its name.
+- ssdpy-discover sends an M-SEARCH query and collects all responses.
+
+## Release checklist
+
+- Update `ssdpy/version.py` with new version name.
+- Update `CHANGES.md`.
+- Run `make release`.
+
 ## Links
 
 * IETF draft of the protocl (still in use by some devices, e.g. redfish) [https://tools.ietf.org/html/draft-cai-ssdp-v1-03](https://tools.ietf.org/html/draft-cai-ssdp-v1-03)
