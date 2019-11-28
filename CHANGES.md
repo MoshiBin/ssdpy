@@ -3,6 +3,7 @@
 - 
 
 ### 0.2.3
+(2019-11-28)
 
 - Added `--json` flag to ssdpy-discover.
 - `SSDPServer.serve_forever()` will skip packets it cannot send instead of crashing.
