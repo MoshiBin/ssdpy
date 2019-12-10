@@ -3,4 +3,5 @@ pytest
 wheel
 twine
 pytest-cov
+pytest-mock
 codecov

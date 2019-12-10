@@ -2,7 +2,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import pytest
 import json
-from .compat import mock
 from ssdpy.cli import client as client_cli
 
 
@@ -29,8 +28,8 @@ def test_no_st():
         client_cli.parse_args((""))
 
 
-def test_basic_discovery(monkeypatch):
-    monkeypatch.setattr(client_cli, "SSDPClient", mock.MagicMock())
+def test_basic_discovery(mocker):
+    mocker.patch.object(client_cli, "SSDPClient")
     client_cli.main(("ssdp:test", ))
     client_cli.SSDPClient.assert_called_once_with(
         proto="ipv4",
@@ -42,8 +41,8 @@ def test_basic_discovery(monkeypatch):
     # TODO: Check that client.m_search has been called.
 
 
-def test_client_discovery_ipv6(monkeypatch):
-    monkeypatch.setattr(client_cli, "SSDPClient", mock.MagicMock())
+def test_client_discovery_ipv6(mocker):
+    mocker.patch.object(client_cli, "SSDPClient")
     client_cli.main(("ssdp:test", "--ipv6"))
     client_cli.SSDPClient.assert_called_once_with(
         proto="ipv6",
@@ -53,7 +52,7 @@ def test_client_discovery_ipv6(monkeypatch):
         timeout=5,
     )
 
-    monkeypatch.setattr(client_cli, "SSDPClient", mock.MagicMock())
+    mocker.patch.object(client_cli, "SSDPClient")
     client_cli.main(("ssdp:test", "-6"))
     client_cli.SSDPClient.assert_called_once_with(
         proto="ipv6",
@@ -64,8 +63,8 @@ def test_client_discovery_ipv6(monkeypatch):
     )
 
 
-def test_client_discovery_all_args(monkeypatch):
-    monkeypatch.setattr(client_cli, "SSDPClient", mock.MagicMock())
+def test_client_discovery_all_args(mocker):
+    mocker.patch.object(client_cli, "SSDPClient")
     client_cli.main(
         (
             "ssdp:test",
