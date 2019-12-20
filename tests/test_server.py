@@ -7,6 +7,11 @@ import os
 from ssdpy import SSDPServer
 
 
+def test_invalid_proto():
+    with pytest.raises(ValueError):
+        SSDPServer("test-server", proto="NULL")
+
+
 def test_server_ipv4():
     server = SSDPServer("test-server", proto="ipv4")
     server.sock.settimeout(5)

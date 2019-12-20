@@ -28,3 +28,8 @@ def test_parse_headers_bad_response_header():
     )
     with pytest.raises(ValueError):
         parse_headers(bad_response)
+
+
+def test_empty_response():
+    empty_response = b"HTTP/1.1 200 OK\r\n"
+    parse_headers(empty_response)
