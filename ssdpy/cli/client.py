@@ -32,6 +32,7 @@ def parse_args(argv):
     )
     parser.add_argument("ST", help="Type of device to search for (ST)", nargs=1)
     parser.add_argument("-i", "--iface", help="Listen on a specific network interface")
+    parser.add_argument("-a", "--address", help="Bind to this address")
     parser.add_argument(
         "-p", "--port", help="Send on this port (default: 1900)", default=1900, type=int
     )
@@ -43,10 +44,7 @@ def parse_args(argv):
         type=int,
     )
     parser.add_argument(
-        "-j",
-        "--json",
-        help="Format output as JSON",
-        action="store_true",
+        "-j", "--json", help="Format output as JSON", action="store_true",
     )
     return parser.parse_args(argv)
 
@@ -68,6 +66,7 @@ def main(argv=None):
         ttl=args.ttl,
         iface=args.iface,
         timeout=args.timeout,
+        address=args.address,
     )
 
     logger = logging.getLogger("ssdpy.client")
