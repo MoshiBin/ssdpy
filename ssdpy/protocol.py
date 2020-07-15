@@ -21,6 +21,7 @@ def create_msearch_payload(host, st, mx=1):
         'MAN: "ssdp:discover"\r\n'
         "ST:{}\r\n"
         "MX:{}\r\n"
+        "\r\n"
     ).format(host, st, mx)
     return data.encode("utf-8")
 
