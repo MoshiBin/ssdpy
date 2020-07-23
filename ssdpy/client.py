@@ -10,7 +10,15 @@ from .compat import if_nametoindex
 
 class SSDPClient(object):
     def __init__(
-        self, proto="ipv4", port=1900, ttl=2, iface=None, timeout=5, *args, **kwargs
+        self,
+        proto="ipv4",
+        port=1900,
+        ttl=2,
+        iface=None,
+        timeout=5,
+        address=None,
+        *args,
+        **kwargs
     ):
         allowed_protos = ("ipv4", "ipv6")
         if proto not in allowed_protos:
@@ -31,6 +39,8 @@ class SSDPClient(object):
         self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, ttl)
         self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 1)
         self.sock.settimeout(timeout)
+        if address is not None:
+            self.sock.bind((address, 0))
         if iface is not None:
             self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, iface)
             if proto == "ipv6":

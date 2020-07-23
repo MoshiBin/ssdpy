@@ -37,6 +37,7 @@ def test_basic_discovery(mocker):
         ttl=2,
         iface=None,
         timeout=5,
+        address=None,
     )
     # TODO: Check that client.m_search has been called.
 
@@ -50,6 +51,7 @@ def test_client_discovery_ipv6(mocker):
         ttl=2,
         iface=None,
         timeout=5,
+        address=None,
     )
 
     mocker.patch.object(client_cli, "SSDPClient")
@@ -60,6 +62,7 @@ def test_client_discovery_ipv6(mocker):
         ttl=2,
         iface=None,
         timeout=5,
+        address=None,
     )
 
 
@@ -88,6 +91,7 @@ def test_client_discovery_all_args(mocker):
         ttl=100,
         iface=b"test_iface",
         timeout=200,
+        address=None,
     )
 
 
