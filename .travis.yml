@@ -1,13 +1,12 @@
 language: python
 python:
   - "2.7"
-  - "3.4"
   - "3.5"
   - "3.6"
   - "3.7"
   - "3.8"
 install:
-  - pip install -r dev-requirements.txt
+  - pip install -Ur dev-requirements.txt
 script:
   - pytest --cov-report=xml --cov=ssdpy
   - codecov

@@ -17,7 +17,7 @@ setup(
     author_email="moshi@moshib.in",
     url="https://github.com/MoshiBin/ssdpy",
     packages=find_packages(exclude=["tests"]),
-    python_requires=">=2.7",
+    python_requires=">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,<4",
     install_requires=[
         'mock;python_version<"3.4"',
     ],
@@ -32,7 +32,6 @@ setup(
         "Intended Audience :: Developers",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
