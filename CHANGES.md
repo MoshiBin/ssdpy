@@ -1,6 +1,7 @@
 ### Latest changes (not in a release)
 
-- 
+- Dropped support for Python 3.4
+- Fixed a compatibility issue in protocol.py (thanks @ZacJW)
 
 ### 0.2.3
 (2019-11-28)
