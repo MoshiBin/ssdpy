@@ -76,4 +76,5 @@ def create_notify_payload(host, nt, usn, location=None, al=None, max_age=None):
         data += "AL:{}\r\n".format(al)
     if max_age is not None:
         data += "Cache-Control:max-age={}\r\n".format(max_age)
+    data += "\r\n"
     return data.encode("utf-8")
