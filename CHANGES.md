@@ -2,7 +2,7 @@
 
 - Fixed an issue where NOTIFY messages were not conforming to UPnP (thanks @hotab)
 
-## 0.3.0
+### 0.3.0
 (2020-08-10)
 
 - Dropped support for Python 3.4
