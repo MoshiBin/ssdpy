@@ -14,6 +14,36 @@ logger = logging.getLogger("ssdpy.server")
 
 
 class SSDPServer(object):
+    """
+    A server that can listen to SSDP M-SEARCH requests and responds with appropriate NOTIFY packets when the ST matches its device_type.
+
+    Example usage::
+
+    >>> server = SSDPServer("my-service", device_type="my-device-type")
+    >>> server.serve_forever()
+
+    This will listen to SSDP M-Searches (discovery) and respond with
+
+    :param usn: A unique service name, which identifies your service.
+    :type usn: str
+    :param proto: Protocol to use, either ``ipv4`` or ``ipv6``. Defaults to ``ipv4.``
+    :type proto: str, optional
+    :param device_type: The device type to respond as. Defaults to ``ssdp:rootdevice`` which is the base type for ssdp devices.
+    :type device_type: str, optional
+    :param port: Port to listen on. SSDP works on port 1900, which is the default value here.
+    :type port: int, optional
+    :param iface: Interface to bind to. When not provided, the operating system decides which interface should handle multicasts and binds to it.
+    :type iface: bytes, optional
+    :param address: A specific address to bind to. This is required when using IPv6, since you will have a link-local IP address in addition to at least one actual IP address.
+    :type address: str, optional
+    :param max_age: The maximum time, in seconds, for clients to cache notifications.
+    :type max_age: int
+    :param location: Canonical URL of the service.
+    :type location: str
+    :param al: Canonical URL of the service, but only supported in the IETF version of SSDP. Should be the same as ``location``.
+    :type al: str
+    """
+
     def __init__(
         self,
         usn,
@@ -26,19 +56,9 @@ class SSDPServer(object):
         location=None,
         al=None,
     ):
-        """
-        A server that listens to SSDP M-SEARCH requests and responds with appropriate NOTIFY
-        packets when the ST matches its device_type.
-
-        Usage:
-        >>> server = SSDPServer("my-service", device_type="my-device-type")
-        >>> server.serve_forever()
-        """
         allowed_protos = ("ipv4", "ipv6")
         if proto not in allowed_protos:
-            raise ValueError(
-                "Invalid proto - expected one of {}".format(allowed_protos)
-            )
+            raise ValueError("Invalid proto - expected one of {}".format(allowed_protos))
         self.stopped = False
         self.usn = usn
         self.device_type = device_type
@@ -101,18 +121,11 @@ class SSDPServer(object):
             # Not an SSDP M-SEARCH; ignore.
             logger.debug("NOT M-SEARCH - SKIPPING")
             pass
-        if data.startswith(b"M-SEARCH") and (
-            headers.get("st") == self.device_type or headers.get("st") == "ssdp:all"
-        ):
+        if data.startswith(b"M-SEARCH") and (headers.get("st") == self.device_type or headers.get("st") == "ssdp:all"):
             logger.info("Received qualifying M-SEARCH from {}".format(address))
             logger.debug("M-SEARCH data: {}".format(headers))
             notify = create_notify_payload(
-                self._broadcast_ip,
-                self.device_type,
-                self.usn,
-                self.location,
-                self.al,
-                self.max_age,
+                self._broadcast_ip, self.device_type, self.usn, self.location, self.al, self.max_age,
             )
             logger.debug("Created NOTIFY: {}".format(notify))
             try:
@@ -122,6 +135,9 @@ class SSDPServer(object):
                 logger.debug("Unable to send NOTIFY to {}: {}".format(address, e))
 
     def serve_forever(self):
+        """
+        Start listening for M-SEARCH discovery attempts and answer any that refers to our ``device_type`` or to ``ssdp:all``. This will block execution until an exception occurs.
+        """
         logger.info("Listening forever")
         try:
             while not self.stopped:

@@ -66,21 +66,13 @@ class SSDPClient(object):
         """
         Send an M-SEARCH request and gather responses.
 
-        Parameters
-        ----------
-        st : str
-            The Search Target, used to narrow down the responses
-            that should be received. Defaults to "ssdp:all" which should get
-            responses from any SSDP-enabled device.
+        :param st: The Search Target, used to narrow down the responses that should be received. Defaults to "ssdp:all" which should get responses from any SSDP-enabled device.
+        :type st: str
 
-        mx : int
-            Maximum wait time (in seconds) that devices are allowed to wait before
-            sending a response. Should be between 1 and 5, though this is not enforced
-            in this implementation.
-            Devices will randomly wait for anywhere between 0 and 'mx' seconds in
-            order to avoid flooding the client that sends the M-SEARCH. Increase the
-            value of 'mx' if you expect a large number of devices to answer, in order
-            to avoid losing responses.
+        :param mx: Maximum wait time (in seconds) that devices are allowed to wait before sending a response. Should be between 1 and 5, though this is not enforced in this implementation. Devices will randomly wait for anywhere between 0 and 'mx' seconds in order to avoid flooding the client that sends the M-SEARCH. Increase the value of 'mx' if you expect a large number of devices to answer, in order to avoid losing responses.
+        :type mx: int
+
+        :return: A list of all discovered SSDP services. Each service is represented by a dict, with the keys being the lowercase equivalents of the response headers.
         """
         host = "{}:{}".format(self.broadcast_ip, self.port)
         data = create_msearch_payload(host, st, mx)
@@ -99,6 +91,11 @@ class SSDPClient(object):
 
 
 def discover():
+    """
+    An ad-hoc way of discovering all SSDP services without explicitly initializing an :class:`~ssdpy.SSDPClient`.
+
+    :return: A list of all discovered SSDP services, each service in a dictionary.
+    """
     ms = SSDPClient()
     responses = ms.m_search()
     ret = []
