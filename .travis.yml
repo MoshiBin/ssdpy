@@ -6,7 +6,7 @@ python:
   - "3.7"
   - "3.8"
 install:
-  - pip install -Ur dev-requirements.txt
+  - pip install -U mock pytest pytest-mock pytest-cov codecov
 script:
   - pytest --cov-report=xml --cov=ssdpy
   - codecov
