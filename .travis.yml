@@ -6,9 +6,9 @@ python:
   - "3.7"
   - "3.8"
 install:
-  - sudo pip install -U mock pytest pytest-mock pytest-cov codecov
+  - pip install -U mock pytest pytest-mock pytest-cov codecov
 script:
-  - sudo coverage run --source=ssdpy,tests -m pytest tests/
+  - sudo $VIRTUAL_ENV/bin/coverage run --source=ssdpy,tests -m pytest tests/
 
 after_success:
   - codecov
