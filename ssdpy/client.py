@@ -5,7 +5,7 @@ import socket
 from .constants import ipv4_multicast_ip, ipv6_multicast_ip
 from .http_helper import parse_headers
 from .protocol import create_msearch_payload
-from .compat import if_nametoindex
+from .compat import if_nametoindex, SO_BINDTODEVICE
 
 
 class SSDPClient(object):
@@ -42,7 +42,7 @@ class SSDPClient(object):
         if address is not None:
             self.sock.bind((address, 0))
         if iface is not None:
-            self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, iface)
+            self.sock.setsockopt(socket.SOL_SOCKET, SO_BINDTODEVICE, iface)
             if proto == "ipv6":
                 # Specifically set multicast on interface
                 iface_index = if_nametoindex(iface)
