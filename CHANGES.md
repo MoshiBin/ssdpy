@@ -1,6 +1,7 @@
 ### Latest changes (not in a release)
 
 - Fixed an issue where NOTIFY messages were not conforming to UPnP (thanks @hotab)
+- Fixed an issue where `ssdpy.client.discover()` was using wrong syntax.
 
 ### 0.3.0
 (2020-08-10)
