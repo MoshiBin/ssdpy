@@ -9,6 +9,8 @@ install:
   - pip install -U mock pytest pytest-mock pytest-cov codecov
 script:
   - coverage run --source=ssdpy,tests -m pytest tests/
+
+after_success:
   - codecov
 
 branches:
