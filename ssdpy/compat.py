@@ -25,7 +25,7 @@ if PY2:
 
         rc = libc.if_nametoindex(name)
         if rc == 0:
-            raise RuntimeError("Invalid interface name '{}'".format(name))
+            raise OSError("no interface with this name '{}'".format(name))
         return rc
 else:
     if_nametoindex = socket.if_nametoindex
