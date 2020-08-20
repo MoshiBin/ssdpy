@@ -6,7 +6,7 @@ python:
   - "3.7"
   - "3.8"
 install:
-  - pip install -U mock pytest pytest-mock pytest-cov codecov
+  - sudo pip install -U mock pytest pytest-mock pytest-cov codecov
 script:
   - sudo coverage run --source=ssdpy,tests -m pytest tests/
 
