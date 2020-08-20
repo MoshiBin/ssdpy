@@ -7,7 +7,7 @@ import struct
 from .constants import ipv6_multicast_ip, ipv4_multicast_ip
 from .protocol import create_notify_payload
 from .http_helper import parse_headers
-from .compat import if_nametoindex
+from .compat import if_nametoindex, SO_BINDTODEVICE
 
 
 logger = logging.getLogger("ssdpy.server")
@@ -83,7 +83,7 @@ class SSDPServer(object):
 
         # Bind to specific interface
         if iface is not None:
-            self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, iface)
+            self.sock.setsockopt(socket.SOL_SOCKET, SO_BINDTODEVICE, iface)
 
         # Subscribe to multicast address
         if proto == "ipv4":

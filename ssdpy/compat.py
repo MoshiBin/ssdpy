@@ -29,3 +29,6 @@ if PY2:
         return rc
 else:
     if_nametoindex = socket.if_nametoindex
+
+
+SO_BINDTODEVICE = getattr(socket, "SO_BINDTODEVICE", 25)
