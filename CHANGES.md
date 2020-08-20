@@ -2,6 +2,7 @@
 
 - Fixed an issue where NOTIFY messages were not conforming to UPnP (thanks @hotab)
 - Fixed an issue where `ssdpy.client.discover()` was using wrong syntax.
+- Changed the exception raised by `ssdpy.compat.if_nametoindex()` to be the same as in Python 3 (OSError).
 
 ### 0.3.0
 (2020-08-10)
