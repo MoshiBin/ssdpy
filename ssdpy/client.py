@@ -96,10 +96,4 @@ def discover():
 
     :return: A list of all discovered SSDP services, each service in a dictionary.
     """
-    ms = SSDPClient()
-    responses = ms.m_search()
-    ret = []
-    for response in responses:
-        headers = parse_headers(response)
-        ret.append(headers)
-    return ret
+    return SSDPClient().m_search()
