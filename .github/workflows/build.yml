@@ -1,0 +1,51 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+  test:
+    # The type of runner that the job will run on
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: [2.7, 3.5, 3.6, 3.7, 3.8, 3.9]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+
+      - name: Install SSDPy
+        run: |
+          pip install --upgrade pip
+          pip install --upgrade mock pytest pytest-mock pytest-cov codecov
+          pip install --editable .
+          
+      - name: Lint with flake8
+        run: |
+          pip install --upgrade flake8
+          flake8 --ignore=E501 .
+          
+      - name: pytest
+        run: sudo coverage run --source ssdpy,tests -m pytest tests/
+        
+      - name: Upload to codecov
+        uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true
