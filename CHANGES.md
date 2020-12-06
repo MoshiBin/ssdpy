@@ -4,6 +4,7 @@
 - Fixed an issue where `ssdpy.client.discover()` was using wrong syntax.
 - Changed the exception raised by `ssdpy.compat.if_nametoindex()` to be the same as in Python 3 (OSError).
 - Added tests for `ssdpy.client`, `ssdpy.compat` and created more tests for `ssdpy.server` to increase coverage.
+- Added support for custom fields in NOTIFY. Pass `extra_fields={"field": "value"}` to `ssdpy.SSDPServer` or pass `-e|--extra-field NAME VALUE` to `ssdpy-server`.
 
 ### 0.3.0
 (2020-08-10)
