@@ -39,9 +39,7 @@ def test_notify_location():
 
 
 def test_notify_al():
-    data = create_notify_payload(
-        "239.255.255.250:1900", "testdevice", "ssdpy-test", al="http://localhost"
-    )
+    data = create_notify_payload("239.255.255.250:1900", "testdevice", "ssdpy-test", al="http://localhost")
     data_headers = parse_headers(data)
     assert data_headers.get("host") == "239.255.255.250:1900"
     assert data_headers.get("nt") == "testdevice"
@@ -51,9 +49,7 @@ def test_notify_al():
 
 
 def test_notify_age():
-    data = create_notify_payload(
-        "239.255.255.250:1900", "testdevice", "ssdpy-test", max_age=999
-    )
+    data = create_notify_payload("239.255.255.250:1900", "testdevice", "ssdpy-test", max_age=999)
     data_headers = parse_headers(data)
     assert data_headers.get("host") == "239.255.255.250:1900"
     assert data_headers.get("nt") == "testdevice"
@@ -65,3 +61,16 @@ def test_notify_age():
 def test_notify_edge_cases():
     with pytest.raises(ValueError):
         create_notify_payload("x", "y", "z", max_age="not-a-number")
+
+
+def test_notify_extra_fields():
+    data = create_notify_payload(
+        "239.255.255.250:1900",
+        "testdevice",
+        "ssdpy-test",
+        extra_fields={"test-header": "test-value", "test-header.domain.com": "test-value2"},
+    )
+    data_headers = parse_headers(data)
+    assert data_headers.get("test-header") == "test-value"
+    assert data_headers.get("test-header.domain.com") == "test-value2"
+    assert data_headers.get("non-existant-header") is None

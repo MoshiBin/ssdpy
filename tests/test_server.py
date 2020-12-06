@@ -67,3 +67,12 @@ def test_server_bind_address_and_iface_ipv6():
     except OSError as e:
         if e.errno != errno.ENOPROTOOPT:  # Protocol not supported
             raise
+
+
+def test_server_extra_fields():
+    SSDPServer("test-server", extra_fields={"test-field": "foo", "test-field2": "bar"})
+
+
+def test_server_extra_fields_non_ascii():
+    with pytest.raises(ValueError):
+        SSDPServer("test-server", extra_fields={"invalid-field™": "foo"})

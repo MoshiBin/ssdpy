@@ -11,17 +11,11 @@ logging.basicConfig()
 
 def parse_args(argv):
     parser = argparse.ArgumentParser(description="Start an SSDP server")
-    parser.add_argument(
-        "-V", "--version", action="version", version="%(prog)s {}".format(VERSION)
-    )
+    parser.add_argument("-V", "--version", action="version", version="%(prog)s {}".format(VERSION))
     parser.add_argument("-v", "--verbose", help="Be more verbose", action="store_true")
     proto_group = parser.add_mutually_exclusive_group()
-    proto_group.add_argument(
-        "-4", "--ipv4", help="Listen on IPv4 (default: True)", action="store_true"
-    )
-    proto_group.add_argument(
-        "-6", "--ipv6", help="Listen on IPv6 instead of IPv4", action="store_true"
-    )
+    proto_group.add_argument("-4", "--ipv4", help="Listen on IPv4 (default: True)", action="store_true")
+    proto_group.add_argument("-6", "--ipv6", help="Listen on IPv6 instead of IPv4", action="store_true")
     parser.add_argument("usn", help="Unique server name", nargs=1)
     parser.add_argument(
         "-t",
@@ -52,11 +46,22 @@ def parse_args(argv):
         "--address",
         help="Address of the interface to listen on. Only valid for IPv4.",
     )
+    parser.add_argument(
+        "-e",
+        "--extra-field",
+        action="append",
+        nargs=2,
+        metavar=("NAME", "VALUE"),
+        help="Extra fields to pass in NOTIFY packets. Pass multiple times for multiple extra headers",
+    )
     return parser.parse_args(argv)
 
 
 def main(argv=None):
     args = parse_args(argv)
+    extra_fields = None
+    if args.extra_field is not None:
+        extra_fields = dict(args.extra_field)
 
     if args.ipv6:
         proto = "ipv6"
@@ -76,6 +81,7 @@ def main(argv=None):
         max_age=args.max_age,
         al=args.location,
         location=args.location,
+        extra_fields=extra_fields,
     )
 
     logger = logging.getLogger("ssdpy.server")
