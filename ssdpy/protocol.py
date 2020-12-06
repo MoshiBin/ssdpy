@@ -7,13 +7,16 @@ def create_msearch_payload(host, st, mx=1):
     Create an M-SEARCH packet using the given parameters.
     Returns a bytes object containing a valid M-SEARCH request.
 
-    Parameters
-    ----------
-    host : str
-        The address (IP + port) that the M-SEARCH will be sent to.
-        This is usually a multicast address.
-    st : str
+    :param host: The address (IP + port) that the M-SEARCH will be sent to. This is usually a multicast address.
+    :type host: str
 
+    :param st: Search target. The type of services that should respond to the search.
+    :type st: str
+
+    :param mx: Maximum wait time, in seconds, for responses.
+    :type mx: int
+
+    :return: A bytes object containing the generated M-SEARCH payload.
     """
     data = (
         "M-SEARCH * HTTP/1.1\r\n"
@@ -42,24 +45,25 @@ def create_notify_payload(host, nt, usn, location=None, al=None, max_age=None):
     all) is supported.
     If in doubt, send both. If your notifications go ignored, opt to not send 'al'.
 
-    Parameters
-    ----------
-    host : str
-        The address (IP + port) that the NOTIFY will be sent about.
-        This is usually a multicast address.
-    nt : str
-        Notification type. Indicates which device is sending the notification.
-    usn : str
-        Unique identifier for the service. Usually this will be composed of a
-        UUID or any other universal identifier.
-    location : str
-        A URL for more information about the service. This parameter is only valid
-        when sending a UPnP SSDP packet.
-    al : str
-        Similar to 'location', but only supported on IETF SSDP, not UPnP.
-    max_age : int
-        Amount of time in seconds that the NOTIFY packet should be cached by
-        clients receiving it. In UPnP, this header is required.
+    :param host:  The address (IP + port) that the NOTIFY will be sent about. This is usually a multicast address.
+    :type host: str
+
+    :param nt: Notification type. Indicates which device is sending the notification.
+    :type nt: str
+
+    :param usn: Unique identifier for the service. Usually this will be composed of a UUID or any other universal identifier.
+    :type usn: str
+
+    :param location: A URL for more information about the service. This parameter is only valid when sending a UPnP SSDP packet, not IETF.
+    :type location: str
+
+    :param al: Similar to 'location', but only supported on IETF SSDP, not UPnP.
+    :type al: str
+
+    :param max_age: Amount of time in seconds that the NOTIFY packet should be cached by clients receiving it. In UPnP, this header is required.
+    :type max_age: int
+
+    :return: A bytes object containing the generated NOTIFY payload.
     """
     if max_age is not None and not isinstance(max_age, int):
         raise ValueError("max_age must by of type: int")
