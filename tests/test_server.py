@@ -19,7 +19,7 @@ def test_server_ipv4():
 
 
 @pytest.mark.skipif(
-    os.environ.get("SKIP_IPV6") == "true",
+    os.environ.get("CI") == "true",
     reason="IPv6 testing is broken in Travis-CI, see https://github.com/travis-ci/travis-ci/issues/8361",
 )
 def test_server_ipv6():
@@ -38,7 +38,7 @@ def test_server_invalid_proto():
 
 
 @pytest.mark.skipif(
-    os.environ.get("SKIP_LOOPBACK") == "true",
+    os.environ.get("CI") == "true",
     reason="Not all development environments have a predictable loopback device name",
 )
 def test_server_binds_iface():
@@ -50,7 +50,7 @@ def test_server_bind_address_ipv4():
 
 
 @pytest.mark.skipif(
-    os.environ.get("SKIP_IPV6") == "true",
+    os.environ.get("CI") == "true",
     reason="IPv6 testing is broken in Travis-CI, see https://github.com/travis-ci/travis-ci/issues/8361",
 )
 def test_server_bind_address_ipv6():
@@ -58,7 +58,7 @@ def test_server_bind_address_ipv6():
 
 
 @pytest.mark.skipif(
-    os.environ.get("SKIP_IPV6") == "true",
+    os.environ.get("CI") == "true",
     reason="IPv6 testing is broken in Travis-CI, see https://github.com/travis-ci/travis-ci/issues/8361",
 )
 def test_server_bind_address_and_iface_ipv6():

@@ -14,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
         python-version: [2.7, 3.5, 3.6, 3.7, 3.8, 3.9]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -41,9 +41,9 @@ jobs:
         run: |
           pip install --upgrade flake8
           flake8 --ignore=E501 .
-          
+
       - name: pytest
-        run: DISABLE_LOOPBACK=true DISABLE_IPV6=true sudo -E coverage run --source ssdpy,tests -m pytest tests/
+        run: DISABLE_LOOPBACK=true DISABLE_IPV6=true sudo -E $pythonLocation/bin/coverage run --source ssdpy,tests -m pytest tests/
         
       - name: Upload to codecov
         uses: codecov/codecov-action@v1
