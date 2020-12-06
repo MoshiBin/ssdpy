@@ -23,3 +23,10 @@ Functions
 =========
 
 .. autofunction:: ssdpy.client::discover
+
+Helpers
+=======
+
+.. autofunction:: ssdpy.protocol::create_msearch_payload
+
+.. autofunction:: ssdpy.protocol::create_notify_payload
