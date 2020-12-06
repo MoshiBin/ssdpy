@@ -28,6 +28,10 @@ def test_client_binds_iface():
     SSDPClient(iface=b"lo")
 
 
+@pytest.mark.skipif(
+    os.environ.get("CI") == "true",
+    reason="IPv6 testing is broken in GitHub Actions, see https://github.com/actions/virtual-environments/issues/668",
+)
 def test_client_bind_iface_ipv6():
     try:
         SSDPClient(proto="ipv6", iface=b"lo")

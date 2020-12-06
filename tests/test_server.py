@@ -20,7 +20,7 @@ def test_server_ipv4():
 
 @pytest.mark.skipif(
     os.environ.get("CI") == "true",
-    reason="IPv6 testing is broken in Travis-CI, see https://github.com/travis-ci/travis-ci/issues/8361",
+    reason="IPv6 testing is broken in GitHub Actions, see https://github.com/actions/virtual-environments/issues/668",
 )
 def test_server_ipv6():
     server = SSDPServer("test-server-ipv6", proto="ipv6")
@@ -51,7 +51,7 @@ def test_server_bind_address_ipv4():
 
 @pytest.mark.skipif(
     os.environ.get("CI") == "true",
-    reason="IPv6 testing is broken in Travis-CI, see https://github.com/travis-ci/travis-ci/issues/8361",
+    reason="IPv6 testing is broken in GitHub Actions, see https://github.com/actions/virtual-environments/issues/668",
 )
 def test_server_bind_address_ipv6():
     SSDPServer("test-server", address="::1", proto="ipv6")
@@ -59,7 +59,7 @@ def test_server_bind_address_ipv6():
 
 @pytest.mark.skipif(
     os.environ.get("CI") == "true",
-    reason="IPv6 testing is broken in Travis-CI, see https://github.com/travis-ci/travis-ci/issues/8361",
+    reason="IPv6 testing is broken in GitHub Actions, see https://github.com/actions/virtual-environments/issues/668",
 )
 def test_server_bind_address_and_iface_ipv6():
     try:

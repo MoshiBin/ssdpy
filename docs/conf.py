@@ -55,7 +55,6 @@ html_theme_options = {
     "github_user": "MoshiBin",
     "github_repo": "ssdpy",
     "github_button": True,
-    "travis_button": True,
     "codecov_button": True,
     "show_related": True,
 }
