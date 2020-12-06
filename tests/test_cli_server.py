@@ -35,6 +35,7 @@ def test_ssdpserver_init(mocker):
         max_age=None,
         port=1900,
         proto="ipv4",
+        extra_fields=None,
     )
 
 
@@ -51,6 +52,7 @@ def test_ssdpserver_init_with_ipv6(mocker):
         max_age=None,
         port=1900,
         proto="ipv6",
+        extra_fields=None,
     )
 
     mocker.patch.object(server_cli, "SSDPServer")
@@ -65,6 +67,7 @@ def test_ssdpserver_init_with_ipv6(mocker):
         max_age=None,
         port=1900,
         proto="ipv6",
+        extra_fields=None,
     )
 
 
@@ -86,6 +89,9 @@ def test_ssdpserver_init_with_args(mocker):
             "test-device",
             "--max-age",
             "0",
+            "-e",
+            "test-field",
+            "foo"
         )
     )
     server_cli.SSDPServer.assert_called_once_with(
@@ -98,4 +104,5 @@ def test_ssdpserver_init_with_args(mocker):
         max_age=0,
         port=0,
         proto="ipv6",
+        extra_fields={"test-field": "foo"},
     )

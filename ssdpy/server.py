@@ -42,6 +42,8 @@ class SSDPServer(object):
     :type location: str
     :param al: Canonical URL of the service, but only supported in the IETF version of SSDP. Should be the same as ``location``.
     :type al: str
+    :param extra_fields: Extra header fields to send. UPnP SSDP section 1.1.3 allows for extra vendor-specific fields to be sent in the NOTIFY packet. According to the spec, the field names MUST be in the format of `token`.`domain-name`, for example `myheader.philips.com`. SSDPy, however, does not check this and allows any field name - as long as it's ASCII.
+    :type extra_fields: dict
     """
 
     def __init__(
@@ -55,6 +57,7 @@ class SSDPServer(object):
         max_age=None,
         location=None,
         al=None,
+        extra_fields=None,
     ):
         allowed_protos = ("ipv4", "ipv6")
         if proto not in allowed_protos:
@@ -66,6 +69,14 @@ class SSDPServer(object):
         self.location = location
         self.max_age = max_age
         self._iface = iface
+
+        self._extra_fields = {}
+        if extra_fields is not None:
+            for field, value in extra_fields.items():
+                try:
+                    self._extra_fields[field.encode("ascii")] = value.encode("ascii")
+                except (UnicodeDecodeError, UnicodeEncodeError):
+                    raise ValueError("Invalid value for extra_field: %s=%s is not ASCII", field, value)
 
         if proto == "ipv4":
             self._af_type = socket.AF_INET
@@ -125,7 +136,13 @@ class SSDPServer(object):
             logger.info("Received qualifying M-SEARCH from {}".format(address))
             logger.debug("M-SEARCH data: {}".format(headers))
             notify = create_notify_payload(
-                self._broadcast_ip, self.device_type, self.usn, self.location, self.al, self.max_age,
+                host=self._broadcast_ip,
+                nt=self.device_type,
+                usn=self.usn,
+                location=self.location,
+                al=self.al,
+                max_age=self.max_age,
+                extra_fields=self._extra_fields,
             )
             logger.debug("Created NOTIFY: {}".format(notify))
             try:

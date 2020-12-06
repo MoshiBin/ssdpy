@@ -29,7 +29,7 @@ def create_msearch_payload(host, st, mx=1):
     return data.encode("utf-8")
 
 
-def create_notify_payload(host, nt, usn, location=None, al=None, max_age=None):
+def create_notify_payload(host, nt, usn, location=None, al=None, max_age=None, extra_fields=None):
     """
     Create a NOTIFY packet using the given parameters.
     Returns a bytes object containing a valid NOTIFY request.
@@ -63,6 +63,8 @@ def create_notify_payload(host, nt, usn, location=None, al=None, max_age=None):
     :param max_age: Amount of time in seconds that the NOTIFY packet should be cached by clients receiving it. In UPnP, this header is required.
     :type max_age: int
 
+    :param extra_fields: Extra header fields to send. UPnP SSDP section 1.1.3 allows for extra vendor-specific fields to be sent in the NOTIFY packet. According to the spec, the field names MUST be in the format of `token`.`domain-name`, for example `myheader.philips.com`. SSDPy, however, does not check this. Normally, headers should be in ASCII - but this function does not enforce that.
+
     :return: A bytes object containing the generated NOTIFY payload.
     """
     if max_age is not None and not isinstance(max_age, int):
@@ -80,5 +82,8 @@ def create_notify_payload(host, nt, usn, location=None, al=None, max_age=None):
         data += "AL:{}\r\n".format(al)
     if max_age is not None:
         data += "Cache-Control:max-age={}\r\n".format(max_age)
+    if extra_fields is not None:
+        for field, value in extra_fields.items():
+            data += "{}:{}\r\n".format(field, value)
     data += "\r\n"
     return data.encode("utf-8")
