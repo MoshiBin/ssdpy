@@ -23,6 +23,7 @@ jobs:
           python -m pip install flake8
           flake8 --ignore=E501 .
       - run: python setup.py sdist bdist_wheel
+      - run: pip install .
 
   docs:
     runs-on: ubuntu-latest
@@ -39,7 +40,7 @@ jobs:
           make linkcheck
           make html
 
-  pytest:
+  tox:
     # The type of runner that the job will run on
     runs-on: ${{ matrix.os }}
     strategy:
@@ -58,18 +59,14 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Display Python version
-        run: python -c "import sys; print(sys.version)"
-
-      - name: Install SSDPy
+      - name: Install Tox
         run: |
           pip install --upgrade pip
-          pip install --upgrade mock pytest pytest-mock pytest-cov codecov
-          pip install --editable .
+          pip install --upgrade tox
 
-      - name: pytest
-        run: sudo -E $pythonLocation/bin/coverage run --source ssdpy,tests -m pytest tests/
-        
+      - name: Run Tox
+        run: tox
+
       - name: Upload to codecov
         uses: codecov/codecov-action@v1
         with:
