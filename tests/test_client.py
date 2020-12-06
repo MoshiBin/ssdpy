@@ -21,7 +21,7 @@ def test_client_rejects_bad_proto():
 
 
 @pytest.mark.skipif(
-    os.environ.get("TRAVIS") != "true",
+    os.environ.get("DISABLE_LOOPBACK") == "true",
     reason="Not all development environments have a predictable loopback device name",
 )
 def test_client_binds_iface():

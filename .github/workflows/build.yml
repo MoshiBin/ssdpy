@@ -43,7 +43,7 @@ jobs:
           flake8 --ignore=E501 .
           
       - name: pytest
-        run: sudo coverage run --source ssdpy,tests -m pytest tests/
+        run: DISABLE_LOOPBACK=true DISABLE_IPV6=true sudo -E coverage run --source ssdpy,tests -m pytest tests/
         
       - name: Upload to codecov
         uses: codecov/codecov-action@v1
