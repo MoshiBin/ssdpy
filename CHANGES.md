@@ -1,6 +1,12 @@
 ### Latest changes (not in a release)
 
 
+### 0.4.1
+(2020-12-07)
+
+- SSDPy no longer requires the `mock` package, other than for testing. The package now only relies on builtin libraries.
+- Fixed an issue with custom fields being encoded to bytes instead of being passed as strings.
+
 ### 0.4.0
 (2020-12-06)
 
