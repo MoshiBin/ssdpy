@@ -74,7 +74,9 @@ class SSDPServer(object):
         if extra_fields is not None:
             for field, value in extra_fields.items():
                 try:
-                    self._extra_fields[field.encode("ascii")] = value.encode("ascii")
+                    field.encode("ascii")
+                    value.encode("ascii")
+                    self._extra_fields[field] = value
                 except (UnicodeDecodeError, UnicodeEncodeError):
                     raise ValueError("Invalid value for extra_field: %s=%s is not ASCII", field, value)
 
