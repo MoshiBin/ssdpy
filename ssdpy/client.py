@@ -2,29 +2,18 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import socket
+import sys
 from .constants import ipv4_multicast_ip, ipv6_multicast_ip
 from .http_helper import parse_headers
 from .protocol import create_msearch_payload
-from .compat import if_nametoindex, SO_BINDTODEVICE
+from .compat import if_nametoindex, SO_BINDTODEVICE, IPPROTO_IPV6
 
 
 class SSDPClient(object):
-    def __init__(
-        self,
-        proto="ipv4",
-        port=1900,
-        ttl=2,
-        iface=None,
-        timeout=5,
-        address=None,
-        *args,
-        **kwargs
-    ):
+    def __init__(self, proto="ipv4", port=1900, ttl=2, iface=None, timeout=5, address=None, *args, **kwargs):
         allowed_protos = ("ipv4", "ipv6")
         if proto not in allowed_protos:
-            raise ValueError(
-                "Invalid proto - expected one of {}".format(allowed_protos)
-            )
+            raise ValueError("Invalid proto - expected one of {}".format(allowed_protos))
         self.port = port
         if proto == "ipv4":
             af_type = socket.AF_INET
@@ -36,8 +25,12 @@ class SSDPClient(object):
             self._address = (self.broadcast_ip, port, 0, 0)
         self.sock = socket.socket(af_type, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, ttl)
-        self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 1)
+        if sys.platform == "win32" and proto == "ipv6":
+            self.sock.setsockopt(IPPROTO_IPV6, socket.IPV6_MULTICAST_HOPS, ttl)
+            self.sock.setsockopt(IPPROTO_IPV6, socket.IPV6_MULTICAST_LOOP, 1)
+        else:
+            self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, ttl)
+            self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 1)
         self.sock.settimeout(timeout)
         if address is not None:
             self.sock.bind((address, 0))
@@ -46,9 +39,7 @@ class SSDPClient(object):
             if proto == "ipv6":
                 # Specifically set multicast on interface
                 iface_index = if_nametoindex(iface)
-                self.sock.setsockopt(
-                    socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_IF, iface_index
-                )
+                self.sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_IF, iface_index)
 
     def send(self, data):
         self.sock.sendto(data, self._address)
