@@ -18,4 +18,4 @@ def test_system(ssdpy_server):
     client = SSDPClient()
     results = client.m_search()
     assert results
-    assert filter(lambda response: response.get("usn") == "test-server", results)
+    assert list(filter(lambda response: response.get("usn") == "test-server", results))
