@@ -80,6 +80,7 @@ def test_ssdpserver_init_with_args(mocker):
     server_cli.main(
         (
             "TestServer",
+            "-v",
             "-i",
             "lo",
             "-a",

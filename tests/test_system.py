@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import threading
 import pytest
 from ssdpy import SSDPServer, SSDPClient
+from ssdpy.cli import client as client_cli
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -19,3 +20,7 @@ def test_system(ssdpy_server):
     results = client.m_search()
     assert results
     assert list(filter(lambda response: response.get("usn") == "test-server", results))
+
+
+def test_system_cli(ssdpy_server):
+    client_cli.main(["ssdp:all"])
