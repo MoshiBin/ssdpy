@@ -5,6 +5,7 @@ import time
 import pytest
 import errno
 import os
+import sys
 from ssdpy import SSDPServer
 
 
@@ -41,6 +42,7 @@ def test_server_invalid_proto():
     os.environ.get("CI") == "true",
     reason="Not all development environments have a predictable loopback device name",
 )
+@pytest.mark.skipif(sys.platform == "win32", reason="No bind to interface on Windows")
 def test_server_binds_iface():
     SSDPServer("test-server", iface=b"lo")
 
@@ -61,6 +63,7 @@ def test_server_bind_address_ipv6():
     os.environ.get("CI") == "true",
     reason="IPv6 testing is broken in GitHub Actions, see https://github.com/actions/virtual-environments/issues/668",
 )
+@pytest.mark.skipif(sys.platform == "win32", reason="No bind to interface on Windows")
 def test_server_bind_address_and_iface_ipv6():
     try:
         SSDPServer("test-server", address="::1", proto="ipv6", iface=b"lo")

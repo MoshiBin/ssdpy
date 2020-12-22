@@ -4,10 +4,11 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import logging
 import socket
 import struct
+import sys
 from .constants import ipv6_multicast_ip, ipv4_multicast_ip
 from .protocol import create_notify_payload
 from .http_helper import parse_headers
-from .compat import if_nametoindex, SO_BINDTODEVICE
+from .compat import if_nametoindex, SO_BINDTODEVICE, inet_pton, IPPROTO_IPV6
 
 
 logger = logging.getLogger("ssdpy.server")
@@ -96,6 +97,8 @@ class SSDPServer(object):
 
         # Bind to specific interface
         if iface is not None:
+            if sys.platform == "win32":
+                raise ValueError("Unable to bind to device under Windows, use a bind address instead")
             self.sock.setsockopt(socket.SOL_SOCKET, SO_BINDTODEVICE, iface)
 
         # Subscribe to multicast address
@@ -105,25 +108,21 @@ class SSDPServer(object):
                 mreq += socket.inet_aton(address)
             else:
                 mreq += struct.pack(b"@I", socket.INADDR_ANY)
-            self.sock.setsockopt(
-                socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq,
-            )
+            self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
             # Allow multicasts on loopback devices (necessary for testing)
             self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 1)
         elif proto == "ipv6":
             # In IPv6 we use the interface index, not the address when subscribing to the group
-            mreq = socket.inet_pton(socket.AF_INET6, self._broadcast_ip)
+            mreq = inet_pton(socket.AF_INET6, self._broadcast_ip)
             if iface is not None:
                 iface_index = if_nametoindex(iface)
                 # Send outgoing packets from the same interface
-                self.sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_IF, iface_index)
+                self.sock.setsockopt(IPPROTO_IPV6, socket.IPV6_MULTICAST_IF, iface_index)
                 mreq += struct.pack(b"@I", iface_index)
             else:
-                mreq += socket.inet_pton(socket.AF_INET6, "::")
-            self.sock.setsockopt(
-                socket.IPPROTO_IPV6, socket.IPV6_JOIN_GROUP, mreq,
-            )
-            self.sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_LOOP, 1)
+                mreq += inet_pton(socket.AF_INET6, "::")
+            self.sock.setsockopt(IPPROTO_IPV6, socket.IPV6_JOIN_GROUP, mreq)
+            self.sock.setsockopt(IPPROTO_IPV6, socket.IPV6_MULTICAST_LOOP, 1)
         self.sock.bind((bind_address, port))
 
     def on_recv(self, data, address):

@@ -1,5 +1,8 @@
+# Changelog
+
 ### Latest changes (not in a release)
 
+- Add support for Win32
 
 ### 0.4.1
 (2020-12-07)
