@@ -42,11 +42,10 @@ else:
 
 
 SO_BINDTODEVICE = getattr(socket, "SO_BINDTODEVICE", 25)
+IPPROTO_IPV6 = getattr(socket, "IPPROTO_IPV6", 41)
 
 
 if PY2 and WINDOWS:
-    IPPROTO_IPV6 = 41
-
     def inet_pton(socket_af, ip_address):
         """
         Python 2.7 on Windows doesn't have the inet_pton function, which SSDPy uses for IPv6
@@ -84,5 +83,4 @@ if PY2 and WINDOWS:
 
 
 else:
-    IPPROTO_IPV6 = socket.IPPROTO_IPV6
     inet_pton = socket.inet_pton
