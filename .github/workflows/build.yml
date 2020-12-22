@@ -44,7 +44,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest]
         python-version: [2.7, 3.5, 3.6, 3.7, 3.8, 3.9]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -69,7 +69,7 @@ jobs:
 
       - name: pytest
         run: sudo -E $pythonLocation/bin/coverage run --source ssdpy,tests -m pytest tests/
-        
+
       - name: Upload to codecov
         uses: codecov/codecov-action@v1
         with:
