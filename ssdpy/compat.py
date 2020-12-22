@@ -8,7 +8,7 @@ import sys
 
 PY2 = sys.version_info[0] == 2
 WINDOWS = sys.platform == "win32"
-LINUX = sys.platform == "linux"
+LINUX = sys.platform.startswith("linux")
 
 string_types = basestring if PY2 else str  # noqa
 
