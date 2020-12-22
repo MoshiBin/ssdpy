@@ -5,7 +5,6 @@ import time
 import pytest
 import errno
 import os
-import sys
 from ssdpy import SSDPServer
 from ssdpy.compat import LINUX, WINDOWS
 
