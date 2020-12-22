@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, print_function, unicode_literals
 import pytest
+import signal
+import os
+import time
+from ssdpy.compat import WINDOWS
 from ssdpy.cli import server as server_cli
 
 
@@ -106,3 +110,13 @@ def test_ssdpserver_init_with_args(mocker):
         proto="ipv6",
         extra_fields={"test-field": "foo"},
     )
+
+
+@pytest.mark.skipif(WINDOWS, reason="No fork() on Windows")
+def test_server_keyboard_interrupt():
+    pid = os.fork()
+    if pid == 0:
+        server_cli.main(["TestServer"])
+    else:
+        time.sleep(2)
+        os.kill(pid, signal.SIGINT)
