@@ -2,6 +2,8 @@
 
 SSDPy is a lightweight implementation of [SSDP](https://en.wikipedia.org/wiki/Simple_Service_Discovery_Protocol) (Simple Service Discovery Protocol). It is designed for ease of use and high compatibility with the protocol in real-life use. It supports both the IETF and UPnP versions of the protocol. You can read the [full documentation here](https://ssdpy.readthedocs.io/en/latest/).
 
+This library works on both Windows and Linux.
+
 ## Example usage
 
 Send an SSDP discover packet (M-SEARCH):
