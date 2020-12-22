@@ -113,7 +113,7 @@ def test_ssdpserver_init_with_args(mocker):
     )
 
 
-@pytest.mark.skipif(WINDOWS, reason="No fork() on Windows")
+@pytest.mark.skipif(WINDOWS or os.environ.get("CI"), reason="No fork() on Windows")
 def test_server_keyboard_interrupt():
     pid = os.fork()
     if pid == 0:
