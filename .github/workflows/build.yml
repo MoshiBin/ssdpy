@@ -79,4 +79,3 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           fail_ci_if_error: true
-          flags: ${{ matrix.os }}_${{ matrix.python-version }}
