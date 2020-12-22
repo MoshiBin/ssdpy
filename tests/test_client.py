@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, print_function, unicode_literals
 import os
-import sys
 import errno
 import pytest
 from ssdpy import SSDPClient
@@ -15,6 +14,7 @@ def test_client_accepts_ipv4():
 
 def test_client_accepts_ipv6():
     SSDPClient(proto="ipv6")
+
 
 @pytest.mark.skipif(LINUX and os.getuid() != 0, reason="This test must run as root")
 def test_client_rejects_bad_proto():
