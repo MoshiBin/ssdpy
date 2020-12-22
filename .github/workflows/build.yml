@@ -69,6 +69,11 @@ jobs:
 
       - name: pytest
         run: sudo -E $pythonLocation/bin/coverage run --source ssdpy,tests -m pytest tests/
+        if: runner.os == 'Linux'
+
+      - name: pytest (Windows)
+        run: coverage run --source ssdpy,tests -m pytest tests/
+        if: runner.os == 'Windows'
 
       - name: Upload to codecov
         uses: codecov/codecov-action@v1
