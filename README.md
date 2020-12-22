@@ -61,6 +61,6 @@ SSDPy comes with two CLI utilities:
 
 ## Links
 
-* IETF draft of the protocl (still in use by some devices, e.g. redfish) [https://tools.ietf.org/html/draft-cai-ssdp-v1-03](https://tools.ietf.org/html/draft-cai-ssdp-v1-03)
-* UPnP Device Architecture 1.1 [https://web.archive.org/web/20150905102426/http://upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.1.pdf](https://web.archive.org/web/20150905102426/http://upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.1.pdf)
-* UPnP Device Architecture 2.0 [https://web.archive.org/web/20151107123618/http://upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v2.0.pdf](https://web.archive.org/web/20151107123618/http://upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v2.0.pdf)
+- IETF draft of the protocl (still in use by some devices, e.g. redfish) [https://tools.ietf.org/html/draft-cai-ssdp-v1-03](https://tools.ietf.org/html/draft-cai-ssdp-v1-03)
+- UPnP Device Architecture 1.1 [https://web.archive.org/web/20150905102426/http://upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.1.pdf](https://web.archive.org/web/20150905102426/http://upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.1.pdf)
+- UPnP Device Architecture 2.0 [https://web.archive.org/web/20151107123618/http://upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v2.0.pdf](https://web.archive.org/web/20151107123618/http://upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v2.0.pdf)
