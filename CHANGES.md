@@ -2,7 +2,8 @@
 
 ## Latest changes (not in a release)
 
-- Add support for Win32
+- Add support for Win32.
+- When running `ssdpy-discover` with no arguments, default to searching for `ssdp:all`.
 
 ## 0.4.1 (2020-12-07)
 
