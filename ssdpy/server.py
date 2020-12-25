@@ -80,6 +80,7 @@ class SSDPServer(object):
                 except (UnicodeDecodeError, UnicodeEncodeError):
                     raise ValueError("Invalid value for extra_field: %s=%s is not ASCII", field, value)
 
+        bind_address = None
         if proto == "ipv4":
             self._af_type = socket.AF_INET
             self._broadcast_ip = ipv4_multicast_ip
@@ -131,6 +132,7 @@ class SSDPServer(object):
         except ValueError:
             # Not an SSDP M-SEARCH; ignore.
             logger.debug("NOT M-SEARCH - SKIPPING")
+            headers = {}
             pass
         if data.startswith(b"M-SEARCH") and (headers.get("st") == self.device_type or headers.get("st") == "ssdp:all"):
             logger.info("Received qualifying M-SEARCH from {}".format(address))
