@@ -23,11 +23,6 @@ def test_verbose():
     assert args.verbose is True
 
 
-def test_no_st():
-    with pytest.raises(SystemExit):
-        client_cli.parse_args((""))
-
-
 def test_basic_discovery(mocker):
     mocker.patch.object(client_cli, "SSDPClient")
     client_cli.main(("ssdp:test", ))
