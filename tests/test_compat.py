@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, print_function, unicode_literals
 import pytest
-import sys
 import socket
 from .compat import PY2
 from ssdpy.compat import if_nametoindex, inet_pton, WINDOWS, MACOSX
