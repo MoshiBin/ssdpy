@@ -4,30 +4,30 @@ import pytest
 import sys
 import socket
 from .compat import PY2
-from ssdpy.compat import if_nametoindex, inet_pton, WINDOWS
+from ssdpy.compat import if_nametoindex, inet_pton, WINDOWS, MACOSX
 
 
-@pytest.mark.skipif(sys.platform == "win32", reason="No bind to interface on Windows")
+@pytest.mark.skipif(WINDOWS or MACOSX, reason="No bind to interface on Win32/Mac")
 def test_if_nametoindex_none():
     if PY2:
         with pytest.raises(TypeError):
             if_nametoindex(None)
 
 
-@pytest.mark.skipif(sys.platform == "win32", reason="No bind to interface on Windows")
+@pytest.mark.skipif(WINDOWS or MACOSX, reason="No bind to interface on Win32/Mac")
 def test_if_nametoindex_int():
     if PY2:
         with pytest.raises(TypeError):
             if_nametoindex(0)
 
 
-@pytest.mark.skipif(sys.platform == "win32", reason="No bind to interface on Windows")
+@pytest.mark.skipif(WINDOWS or MACOSX, reason="No bind to interface on Win32/Mac")
 def test_if_nametoindex_nodevice():
     with pytest.raises(OSError):
         if_nametoindex("does-not-exist")
 
 
-@pytest.mark.skipif(sys.platform == "win32", reason="No bind to interface on Windows")
+@pytest.mark.skipif(WINDOWS or MACOSX, reason="No bind to interface on Win32/Mac")
 def test_if_nametoindex():
     assert type(if_nametoindex(b"lo")) is int
 

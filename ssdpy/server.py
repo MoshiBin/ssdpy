@@ -4,11 +4,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import logging
 import socket
 import struct
-import sys
 from .constants import ipv6_multicast_ip, ipv4_multicast_ip
 from .protocol import create_notify_payload
 from .http_helper import parse_headers
-from .compat import if_nametoindex, SO_BINDTODEVICE, inet_pton, IPPROTO_IPV6
+from .compat import if_nametoindex, SO_BINDTODEVICE, inet_pton, IPPROTO_IPV6, WINDOWS, MACOSX
 
 
 logger = logging.getLogger("ssdpy.server")
@@ -97,8 +96,8 @@ class SSDPServer(object):
 
         # Bind to specific interface
         if iface is not None:
-            if sys.platform == "win32":
-                raise ValueError("Unable to bind to device under Windows, use a bind address instead")
+            if WINDOWS or MACOSX:
+                raise ValueError("Unable to bind to device in this platform, use a bind address instead")
             self.sock.setsockopt(socket.SOL_SOCKET, SO_BINDTODEVICE, iface)
 
         # Subscribe to multicast address

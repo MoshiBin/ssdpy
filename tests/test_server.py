@@ -6,7 +6,7 @@ import pytest
 import errno
 import os
 from ssdpy import SSDPServer
-from ssdpy.compat import LINUX, WINDOWS
+from ssdpy.compat import LINUX, WINDOWS, MACOSX
 
 
 def test_server_ipv4():
@@ -42,7 +42,7 @@ def test_server_invalid_proto():
     os.environ.get("CI") == "true",
     reason="Not all development environments have a predictable loopback device name",
 )
-@pytest.mark.skipif(WINDOWS, reason="No bind to interface on Windows")
+@pytest.mark.skipif(WINDOWS or MACOSX, reason="No bind to interface on Win32/Mac")
 @pytest.mark.skipif(LINUX and os.getuid() != 0, reason="This test must run as root")
 def test_server_binds_iface():
     SSDPServer("test-server", iface=b"lo")
@@ -64,7 +64,7 @@ def test_server_bind_address_ipv6():
     os.environ.get("CI") == "true",
     reason="IPv6 testing is broken in GitHub Actions, see https://github.com/actions/virtual-environments/issues/668",
 )
-@pytest.mark.skipif(WINDOWS, reason="No bind to interface on Windows")
+@pytest.mark.skipif(WINDOWS or MACOSX, reason="No bind to interface on Win32/Mac")
 @pytest.mark.skipif(LINUX and os.getuid() != 0, reason="This test must run as root")
 def test_server_bind_address_and_iface_ipv6():
     try:
