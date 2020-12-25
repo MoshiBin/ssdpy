@@ -2,7 +2,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import socket
-import sys
 from .constants import ipv4_multicast_ip, ipv6_multicast_ip
 from .http_helper import parse_headers
 from .protocol import create_msearch_payload
