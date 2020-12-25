@@ -6,7 +6,7 @@ import sys
 from .constants import ipv4_multicast_ip, ipv6_multicast_ip
 from .http_helper import parse_headers
 from .protocol import create_msearch_payload
-from .compat import if_nametoindex, SO_BINDTODEVICE, IPPROTO_IPV6
+from .compat import if_nametoindex, SO_BINDTODEVICE, IPPROTO_IPV6, WINDOWS, MACOSX
 
 
 class SSDPClient(object):
@@ -25,7 +25,7 @@ class SSDPClient(object):
             self._address = (self.broadcast_ip, port, 0, 0)
         self.sock = socket.socket(af_type, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        if sys.platform == "win32" and proto == "ipv6":
+        if sys.platform in ("win32", "darwin") and proto == "ipv6":
             self.sock.setsockopt(IPPROTO_IPV6, socket.IPV6_MULTICAST_HOPS, ttl)
             self.sock.setsockopt(IPPROTO_IPV6, socket.IPV6_MULTICAST_LOOP, 1)
         else:

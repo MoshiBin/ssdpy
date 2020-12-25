@@ -9,6 +9,7 @@ import sys
 PY2 = sys.version_info[0] == 2
 WINDOWS = sys.platform == "win32"
 LINUX = sys.platform.startswith("linux")
+MACOSX = sys.platform == "darwin"
 
 string_types = basestring if PY2 else str  # noqa
 
