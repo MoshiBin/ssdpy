@@ -148,10 +148,10 @@ class SSDPServer(object):
             )
             logger.debug("Created NOTIFY: {}".format(notify))
             try:
-                self.sock.sendto(notify, (address[0], 1900))
+                self.sock.sendto(notify, self._address)
             except OSError as e:
                 # Most commonly: We received a multicast from an IP not in our subnet
-                logger.debug("Unable to send NOTIFY to {}: {}".format(address, e))
+                logger.debug("Unable to send NOTIFY to {}: {}".format(self._address, e))
 
     def serve_forever(self):
         """
