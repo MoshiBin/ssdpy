@@ -1,5 +1,15 @@
 [build-system]
 requires = ["setuptools", "wheel"]  # PEP 508 specifications.
+build-backend = "setuptools.build_meta"
 
 [tool.black]
 line-length = 119
+
+[flake8]
+max-line-length = 88
+
+[bdist_wheel]
+universal = 1
+
+[doc8]
+max-line-length=119

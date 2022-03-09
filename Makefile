@@ -10,5 +10,5 @@ clean:
 
 .PHONY: release
 release: clean
-	python setup.py sdist bdist_wheel
+	python3 -m build .
 	twine upload dist/*
