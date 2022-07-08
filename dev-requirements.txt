@@ -1,8 +1,8 @@
-mock
-pytest
-wheel
-twine
-pytest-cov
-pytest-mock
-codecov
+mock==4.0.3
+pytest==6.2.1
+wheel==0.36.2
+twine==3.3.0
+pytest-cov==2.10.1
+pytest-mock==3.4.0
+codecov==2.1.11
 sphinx==3.2.0
