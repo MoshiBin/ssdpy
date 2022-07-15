@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath(".."))
 # -- Project information -----------------------------------------------------
 
 project = "SSDPy"
-copyright = "2020, Moshi Binyamini"
+copyright = "2022, Moshi Binyamini"
 author = "Moshi Binyamini"
 
 # The full version, including alpha/beta/rc tags
