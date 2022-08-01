@@ -5,5 +5,5 @@ twine==3.3.0
 pytest-cov==2.10.1
 pytest-mock==3.4.0
 codecov==2.1.12
-sphinx==5.0.2
+sphinx==5.1.1
 Jinja2<3.1
