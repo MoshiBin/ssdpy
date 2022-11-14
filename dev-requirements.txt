@@ -1,6 +1,6 @@
 mock==4.0.3
 pytest==7.1.2
-wheel==0.37.1
+wheel==0.38.4
 twine==3.3.0
 pytest-cov==2.10.1
 pytest-mock==3.4.0
