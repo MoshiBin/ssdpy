@@ -60,4 +60,4 @@ SSDP Server from Python
 
     from ssdpy import SSDPServer
     server = SSDPServer("my-special-service", location="http://192.168.0.100:8080/hello")
-    server.server_forever()
+    server.serve_forever()
